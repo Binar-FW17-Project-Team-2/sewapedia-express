@@ -1,6 +1,6 @@
 const db = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const order = await db.Order.findOne({
       where: { id: req.params.id },
@@ -22,6 +22,6 @@ module.exports = async (req, res) => {
     console.log(order)
     res.status(200).json(order)
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 }

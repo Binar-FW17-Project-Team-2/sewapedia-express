@@ -1,12 +1,11 @@
 const db = require('../../models')
-const { validationHandler } = require('../../utils')
 const { transporter, sendReceipt } = require('../../utils/sendEmail')
 
 /**
  *
  * @items  array of id OrderItem
  */
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const { id, email } = req.user
     const { items } = req.body
@@ -44,9 +43,6 @@ module.exports = async (req, res) => {
     const sendEmail = await transporter.sendMail(sendReceipt(email, order))
     res.status(200).json({ email: sendEmail, info: [update[0], items.length] })
   } catch (err) {
-    const error = validationHandler(err)
-    error
-      ? res.status(400).json(error)
-      : res.status(500).json({ message: err.message })
+    next(err)
   }
 }

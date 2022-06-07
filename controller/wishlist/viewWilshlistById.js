@@ -1,6 +1,6 @@
 const { User, Product } = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const userId = req.query.userId
     const viewWishlist = await User.findAll({
@@ -16,6 +16,6 @@ module.exports = async (req, res) => {
     if (wishlistData.length == 0) return null
     return res.status(200).send(wishlistData)
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 }

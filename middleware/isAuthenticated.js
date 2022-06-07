@@ -9,7 +9,6 @@ module.exports = (req, res, next) => {
     req.user = data
     next()
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server ERROR' })
+    next(error)
   }
 }

@@ -1,5 +1,4 @@
 const { Product } = require('../../models')
-const { validationHandler } = require('../../utils')
 
 module.exports = async (req, res, next) => {
   try {
@@ -12,9 +11,6 @@ module.exports = async (req, res, next) => {
     const newData = await Product.findAll({ where: { id: id } })
     res.status(201).json({ message: 'Update success', data: newData })
   } catch (err) {
-    const error = validationHandler(err)
-    error
-      ? res.status(400).json(error)
-      : res.status(500).json({ message: 'Internal Server Error' })
+    next(err)
   }
 }

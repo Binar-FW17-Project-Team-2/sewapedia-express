@@ -1,8 +1,7 @@
 const { User } = require('../../models')
 const { verifyToken } = require('../../utils/tokenHandler')
-const { validationHandler } = require('../../utils')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const { password, token } = req.body
     const payload = verifyToken(token)
@@ -19,9 +18,6 @@ module.exports = async (req, res) => {
     )
     res.status(200).json([1, { message: 'reset passwors successful' }])
   } catch (error) {
-    const err = validationHandler(error)
-    err
-      ? res.status(400).json(err)
-      : res.status(500).json({ message: 'Internal server ERROR' })
+    next(error)
   }
 }

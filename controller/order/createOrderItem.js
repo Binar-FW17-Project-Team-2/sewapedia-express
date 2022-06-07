@@ -1,11 +1,10 @@
 const db = require('../../models')
-const { validationHandler } = require('../../utils')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const { productId, qty, lamaSewa } = req.body
     if (isNaN(productId))
-      return res.status(400).json({ message: 'produk tidak ada' })
+      return res.status(400).json({ message: 'produk id harus number' })
     const product = await db.Product.findOne({ where: { id: productId } })
     if (!product) return res.status(400).json({ message: 'product tidak ada' })
     const orderItem = await db.OrderItem.create({
@@ -19,9 +18,6 @@ module.exports = async (req, res) => {
     const response = { ...orderItem.dataValues, productDetails: product }
     res.status(201).json(response)
   } catch (err) {
-    const error = validationHandler(err)
-    error
-      ? res.status(400).json(error)
-      : res.status(500).json({ message: err.message })
+    next(err)
   }
 }

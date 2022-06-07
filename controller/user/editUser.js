@@ -1,6 +1,6 @@
 const { User } = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const id = req.params.id
     const updateUser = {
@@ -12,6 +12,6 @@ module.exports = async (req, res) => {
     await User.update(updateUser, { where: { id }, individualHooks: true })
     res.status(201).json({ message: 'berhasil diedit' })
   } catch (error) {
-    res.status(500).json({ message: 'internal server error' })
+    next(error)
   }
 }

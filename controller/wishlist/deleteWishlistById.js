@@ -1,6 +1,6 @@
 const { Wishlist } = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const userId = req.query.userId
     const productId = req.query.productId
@@ -12,6 +12,6 @@ module.exports = async (req, res) => {
     })
     return res.status(200).json({ message: 'delete success' })
   } catch (error) {
-    res.status(500).json({ message: 'internal server error' })
+    next(error)
   }
 }
