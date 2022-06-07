@@ -2,7 +2,7 @@ const { User } = require('../../models')
 
 module.exports = async (req, res, next) => {
   try {
-    const id = req.params.id
+    const id = req.user.id
     const updateUser = {
       email: req.body.email,
       password: req.body.password,
@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
       role: req.body.role,
     }
     await User.update(updateUser, { where: { id }, individualHooks: true })
-    res.status(201).json({ message: 'berhasil diedit' })
+    res.status(200).json({ message: 'berhasil diedit' })
   } catch (error) {
     next(error)
   }
