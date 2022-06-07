@@ -11,7 +11,6 @@ module.exports = async (req, res) => {
       res.status(404).json(user)
     }
   } catch (error) {
-    console.log(error.message)
     res.status(500).json({ message: 'internal server error' })
   }
 }

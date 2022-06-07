@@ -5,13 +5,14 @@ const {
   getUserById,
   editUser,
   deleteUser,
+  whoAmI,
 } = require('../../controller/user')
 
 user.get('/', getUsers)
 user.get('/:id', getUserById)
 user.use(isAuthenticated)
-user.put('/edit/:id', editUser)
+user.get('/me', whoAmI)
+user.put('/:id', editUser)
 user.delete('/:id', deleteUser)
-// implement delete kalo mau ada delete
 
 module.exports = user

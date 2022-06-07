@@ -19,7 +19,6 @@ module.exports = async (req, res) => {
     })
     res.status(200).json(cart)
   } catch (error) {
-    console.log(error)
     res.status(500).json(error.message)
   }
 }

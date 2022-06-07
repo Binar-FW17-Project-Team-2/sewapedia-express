@@ -15,7 +15,6 @@ module.exports = async (req, res, next) => {
     if (!auth) throw { password: 'invalid password' }
     res.status(200).json(payload)
   } catch (error) {
-    console.log(error)
     if (error.email || error.password) res.status(400).json(error)
     else res.status(500).json({ message: 'Internal server ERROR' })
   }
