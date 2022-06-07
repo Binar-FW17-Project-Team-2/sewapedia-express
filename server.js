@@ -1,21 +1,6 @@
-require('dotenv').config()
-const express = require('express')
-const app = express()
+const http = require('http')
+const app = require('./app')
 const PORT = process.env.PORT || 4000
-const cors = require('cors')
-const routers = require('./routers')
+const server = http.createServer(app)
 
-app.use(
-  cors({
-    credentials: true,
-    origin: 'http://localhost:3000',
-  })
-)
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-
-app.use(routers)
-
-app.listen(PORT, () => {
-  console.log(`app listening on http://localhost:${PORT}`)
-})
+server.listen(PORT, () => console.log(`listening on ${PORT}`))

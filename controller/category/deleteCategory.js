@@ -1,6 +1,6 @@
 const { Category, Product } = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const { name } = req.params
     const products = await Product.findAll({ where: { category: name } })
@@ -11,6 +11,6 @@ module.exports = async (req, res) => {
     const category = await Category.destroy({ where: { name } })
     res.status(200).json([1, { message: 'category berhasil dihapus' }])
   } catch (error) {
-    res.status(500).json('Internal server ERROR')
+    next(error)
   }
 }

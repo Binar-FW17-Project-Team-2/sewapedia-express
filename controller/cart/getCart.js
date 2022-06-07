@@ -1,6 +1,6 @@
 const db = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const { id } = req.user
     const cart = await db.OrderItem.findAll({
@@ -19,6 +19,6 @@ module.exports = async (req, res) => {
     })
     res.status(200).json(cart)
   } catch (error) {
-    res.status(500).json(error.message)
+    next(error)
   }
 }

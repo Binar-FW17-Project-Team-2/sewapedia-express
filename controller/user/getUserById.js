@@ -1,6 +1,6 @@
 const { User } = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const id = req.params.id
     const user = await User.findByPk(id)
@@ -11,6 +11,6 @@ module.exports = async (req, res) => {
       res.status(404).json(user)
     }
   } catch (error) {
-    res.status(500).json({ message: 'internal server error' })
+    next(error)
   }
 }

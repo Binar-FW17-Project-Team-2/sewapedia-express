@@ -6,6 +6,6 @@ module.exports = async (req, res, next) => {
     const productById = await Product.findByPk(id)
     res.status(200).json(productById)
   } catch (error) {
-    res.status(500).json({ meessage: 'internal server error' })
+    next(error)
   }
 }

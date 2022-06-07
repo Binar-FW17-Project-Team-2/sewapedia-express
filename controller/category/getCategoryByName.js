@@ -6,6 +6,6 @@ module.exports = async (req, res, next) => {
     const categoryByName = await Category.findByPk(name)
     res.status(200).json(categoryByName)
   } catch (error) {
-    res.status(500).json({ meessage: 'internal server error' })
+    next(error)
   }
 }

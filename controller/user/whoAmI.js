@@ -1,6 +1,6 @@
 const { User } = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const id = req.user.id
     const user = await User.findOne({
@@ -9,6 +9,6 @@ module.exports = async (req, res) => {
     })
     res.status(200).json(user)
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    next(error)
   }
 }

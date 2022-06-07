@@ -1,6 +1,6 @@
 const db = require('../../models')
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   try {
     const { id } = req.body
     const cartItem = await db.OrderItem.destroy({
@@ -12,6 +12,6 @@ module.exports = async (req, res) => {
     })
     res.status(200).json(cartItem)
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    next(error)
   }
 }
