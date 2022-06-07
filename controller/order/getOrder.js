@@ -12,14 +12,9 @@ module.exports = async (req, res, next) => {
         {
           model: db.User,
           as: 'renter',
-          include: {
-            model: db.Biodata,
-            as: 'Biodata',
-          },
         },
       ],
     })
-    console.log(order)
     res.status(200).json(order)
   } catch (error) {
     next(error)
