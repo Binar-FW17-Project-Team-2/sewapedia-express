@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
   try {
     const { email } = req.body
     const user = await User.findOne({
-      where: { email },
+      where: { email, provider: 'credentials' },
     })
     if (!user)
       return res.status(400).json([0, { message: 'e-mail not registered' }])
