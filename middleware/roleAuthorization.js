@@ -8,13 +8,13 @@ const { User } = require('../models')
 module.exports = (option) => {
   return (req, res, next) => {
     const { id, role } = req.user
-    const uid = req.query.userId || req.params.id
+    const uid = req.query.userId || req.params.userId
     let authorize = false
     if (option === 'admin' && role === 'admin') authorize = true
     if (!option) {
       if (role === 'admin') authorize = true
       if (role === 'user' && id == uid) authorize = true
     }
-    authorize ? next() : res.send('unauthorize')
+    authorize ? next() : res.status(401).json({ message: 'Unauthorized' })
   }
 }

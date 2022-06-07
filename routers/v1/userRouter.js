@@ -1,5 +1,5 @@
 const user = require('express').Router()
-const { isAuthenticated } = require('../../middleware')
+const { isAuthenticated, roleAuthorization } = require('../../middleware')
 const {
   getUsers,
   getUserById,
@@ -9,10 +9,10 @@ const {
 } = require('../../controller/user')
 
 user.get('/', getUsers)
+user.get('/me', isAuthenticated, whoAmI)
 user.get('/:id', getUserById)
 user.use(isAuthenticated)
-user.get('/me', whoAmI)
-user.put('/:id', editUser)
-user.delete('/:id', deleteUser)
+user.put('/', editUser)
+user.delete('/:userId', roleAuthorization(), deleteUser)
 
 module.exports = user
