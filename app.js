@@ -1,6 +1,3 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
 const errorHandler = require('./middleware/errorHandler')
 const express = require('express')
 const routes = require('./routers')
