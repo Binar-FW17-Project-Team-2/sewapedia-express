@@ -2,15 +2,12 @@ const db = require('../../models')
 const { transporter, sendReceipt } = require('../../utils/sendEmail')
 
 /**
- *
  * @items  array of id OrderItem
  */
 module.exports = async (req, res, next) => {
   try {
     const { id, email } = req.user
     const { items } = req.body
-    if (!Array.isArray(items))
-      return res.status(400).json({ message: 'items harus array' })
     const itemsObj = await db.OrderItem.findAll({
       where: { id: items },
     })
