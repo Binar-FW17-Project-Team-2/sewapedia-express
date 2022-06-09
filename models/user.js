@@ -101,12 +101,8 @@ module.exports = (sequelize, DataTypes) => {
   return User
 }
 
-async function hashPassword(user, options) {
-  try {
-    const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(user.password, salt)
-    user.password = hash
-  } catch (err) {
-    throw new Error(err)
-  }
+function hashPassword(user, options) {
+  const salt = bcrypt.genSaltSync(10)
+  const hash = bcrypt.hashSync(user.password, salt)
+  user.password = hash
 }
