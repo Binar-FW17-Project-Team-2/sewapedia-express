@@ -10,8 +10,8 @@ const {
 const { isAuthenticated, roleAuthorization } = require('../../middleware')
 
 product.get('/', getProducts)
-product.get('/:id', getProductById)
 product.get('/category', getListCategory)
+product.get('/:id', getProductById)
 product.use(isAuthenticated, roleAuthorization('admin'))
 product.post('/', addProduct)
 product.put('/:id', updateProductById)
