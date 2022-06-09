@@ -3,7 +3,6 @@ const { Product } = require('../../models')
 module.exports = async (req, res, next) => {
   try {
     const { limit, offset, orderBy, order, ...query } = req.query
-    console.log(query)
     const products = await Product.findAndCountAll({
       where: { ...query },
       limit: limit ?? null,
