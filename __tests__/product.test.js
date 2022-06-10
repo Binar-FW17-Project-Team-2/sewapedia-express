@@ -132,7 +132,7 @@ describe('ADD /product', () => {
   test('TEST CASE 1: ADD PRODUCT SUCCESS', (done) => {
     request(app)
       .post('/api/v1/product')
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .send({
         id: 333,
         name: 'testproduct',
@@ -152,7 +152,7 @@ describe('ADD /product', () => {
   test("TEST CASE 2: INPUT CAN'T NULL", (done) => {
     request(app)
       .post('/api/v1/product')
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -167,7 +167,7 @@ describe('ADD /product', () => {
   test("TEST CASE 3: USER CAN'T ADD PRODUCT", (done) => {
     request(app)
       .post('/api/v1/product')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -183,7 +183,7 @@ describe('UPDATE /product', () => {
   test('TEST CASE 1: UPDATE SUCCESS', (done) => {
     request(app)
       .put(`/api/v1/product/${products[0].id}`)
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .send({
         name: 'testproduct',
         details: 'detailproduct',
@@ -202,7 +202,7 @@ describe('UPDATE /product', () => {
   test('TEST CASE 2: INTERNAL SERVER ERROR', (done) => {
     request(app)
       .put(`/api/v1/product/error`)
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(500)
@@ -216,7 +216,7 @@ describe('DELETE /product', () => {
   test('TEST CASE 1: DELETE SUCCESS', (done) => {
     request(app)
       .delete(`/api/v1/product/${products[0].id}`)
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(200)
@@ -227,7 +227,7 @@ describe('DELETE /product', () => {
   test('TEST CASE 2: INTERNAL SERVER ERROR', (done) => {
     request(app)
       .delete(`/api/v1/product/error`)
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(500)

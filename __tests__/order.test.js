@@ -72,7 +72,7 @@ describe('POST /order/item', () => {
   test('TEST CASE 1: CREATE ORDER ITEM SUCCESS', (done) => {
     request(app)
       .post('/api/v1/order/item')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({
         productId: products[0].id,
         qty: 2,
@@ -93,7 +93,7 @@ describe('POST /order/item', () => {
   test('TEST CASE 2: INPUT FAILED', (done) => {
     request(app)
       .post('/api/v1/order/item')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({
         productId: products[0].id,
         qty: 'dua',
@@ -110,7 +110,7 @@ describe('POST /order/item', () => {
   test('TEST CASE 3: PRODUCT NOT FOUND', (done) => {
     request(app)
       .post('/api/v1/order/item')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({
         productId: 88888,
         qty: 2,
@@ -127,7 +127,7 @@ describe('POST /order/item', () => {
   test('TEST CASE 4: INTERNAL SERVER ERROR ', (done) => {
     request(app)
       .post('/api/v1/order/item')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({
         productId: 'djfk',
         qty: 2,
@@ -173,7 +173,7 @@ describe('POST /order (receipt)', () => {
   test('TEST CASE 1: CREATE RECEIPT SUCCESS', (done) => {
     request(app)
       .post('/api/v1/order')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({ items: [orderItems[0].id] })
       .end((err, res) => {
         if (err) return done(err)
@@ -184,7 +184,7 @@ describe('POST /order (receipt)', () => {
   test('TEST CASE 2: FAILED CREATE RECEIPT TWO TIMES', (done) => {
     request(app)
       .post('/api/v1/order')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({ items: [orderItems[0].id] })
       .end((err, res) => {
         if (err) return done(err)
@@ -199,7 +199,7 @@ describe('POST /order (receipt)', () => {
   test('TEST CASE 3: INTERNAL SERVER ERROR', (done) => {
     request(app)
       .post('/api/v1/order')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({ items: 'akjflkdjfl' })
       .end((err, res) => {
         if (err) return done(err)
@@ -216,7 +216,7 @@ describe('GET /order (receipt)', () => {
   test('TEST CASE 1: GET RECEIPT', (done) => {
     request(app)
       .get('/api/v1/order/1')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(200)
@@ -226,7 +226,7 @@ describe('GET /order (receipt)', () => {
   test('TEST CASE 2: INTERNAL SERVER ERROR', (done) => {
     request(app)
       .get('/api/v1/order/JFKS')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(500)
