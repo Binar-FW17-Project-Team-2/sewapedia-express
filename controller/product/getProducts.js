@@ -1,8 +1,13 @@
-const { Product } = require('../../models')
+const { Product, Sequelize } = require('../../models')
 
 module.exports = async (req, res, next) => {
   try {
     const { limit, offset, orderBy, order, ...query } = req.query
+    if (query.name) {
+      query.name = {
+        [Sequelize.Op.iLike]: `%${query.name}%`,
+      }
+    }
     const products = await Product.findAndCountAll({
       where: { ...query },
       limit: limit ?? null,

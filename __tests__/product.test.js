@@ -108,7 +108,9 @@ describe('GET /produtc/:id', () => {
 describe('GET /product', () => {
   test('TEST CASE 1: SUCCES GET PRODUCTS', (done) => {
     request(app)
-      .get(`/api/v1/product?limit=1&offset=0&orderBy=name&order=DESC`)
+      .get(
+        `/api/v1/product?limit=1&offset=0&orderBy=name&order=DESC&name=product`
+      )
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(200)
