@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
     const id = req.user.id
     const updateUser = {
       email: req.body.email,
-      password: req.body.password,
+      name: req.body.name,
       image: req.body.image,
       role: req.body.role,
     }
