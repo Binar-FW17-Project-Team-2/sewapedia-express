@@ -158,7 +158,7 @@ describe('PUT /user', () => {
       .set({ access_token: access_token_user })
       .send({
         email: 'emailbaru@gmail.com',
-        password: 'Passwordbaru0',
+        name: 'newName',
         image: 'imagebaru',
         role: 'user',
       })
