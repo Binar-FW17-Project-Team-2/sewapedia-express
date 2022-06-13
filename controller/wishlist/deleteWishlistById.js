@@ -4,7 +4,7 @@ module.exports = async (req, res, next) => {
   try {
     const userId = req.query.userId
     const productId = req.query.productId
-    const deleteWishlist = Wishlist.destroy({
+    await Wishlist.destroy({
       where: {
         userId: userId,
         productId: productId,
