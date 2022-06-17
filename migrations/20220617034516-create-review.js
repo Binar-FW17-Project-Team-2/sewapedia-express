@@ -1,7 +1,7 @@
 'use strict'
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('order_items', {
+    await queryInterface.createTable('reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -24,33 +24,18 @@ module.exports = {
           key: 'id',
         },
       },
-      orderId: {
+      message: {
+        type: Sequelize.STRING,
+      },
+      star: {
         type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
+      },
+      reviewId: {
+        type: Sequelize.INTEGER,
         references: {
-          model: 'orders',
+          model: 'reviews',
           key: 'id',
         },
-      },
-      lamaSewa: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      qty: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      priceItem: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      subTotalPrice: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      status: {
-        type: Sequelize.ENUM,
-        values: ['cart', 'order', 'rented', 'returned', 'reviewed'],
       },
       createdAt: {
         allowNull: false,
@@ -63,6 +48,6 @@ module.exports = {
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('order_items')
+    await queryInterface.dropTable('reviews')
   },
 }

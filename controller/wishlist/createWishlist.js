@@ -4,7 +4,6 @@ module.exports = async (req, res, next) => {
   try {
     const userId = req.user.id
     const productId = req.body.productId
-    console.log(req.body)
     const existedWishlist = await Wishlist.findOne({
       where: { userId: userId, productId: productId },
     })

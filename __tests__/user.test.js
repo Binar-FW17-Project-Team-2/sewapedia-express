@@ -104,7 +104,7 @@ describe('GET /user/me', () => {
   test('TEST CASE 1: SUCCESS', (done) => {
     request(app)
       .get(`/api/v1/user/me`)
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -116,7 +116,7 @@ describe('GET /user/me', () => {
   test('TEST CASE 2: INTERNAL SERVER ERROR', (done) => {
     request(app)
       .get(`/api/v1/user/me`)
-      .set({ access_token: createToken({ id: 'error' }) })
+      .set({ authorization: `Bearer ${createToken({ id: 'error' })}` })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -139,7 +139,7 @@ describe('GET /user/me', () => {
   test('TEST CASE 4: ACCESS TOKEN RUSAK', (done) => {
     request(app)
       .get(`/api/v1/user/me`)
-      .set({ access_token: 'rusaak' })
+      .set({ authorization: `Bearer rusak` })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -155,10 +155,10 @@ describe('PUT /user', () => {
   test('TEST CASE 1: EDIT SUCCESS', (done) => {
     request(app)
       .put('/api/v1/user')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({
         email: 'emailbaru@gmail.com',
-        password: 'Passwordbaru0',
+        name: 'newName',
         image: 'imagebaru',
         role: 'user',
       })
@@ -173,7 +173,7 @@ describe('PUT /user', () => {
   test('TEST CASE 2: INVALID INPUT', (done) => {
     request(app)
       .put('/api/v1/user')
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .send({ email: 9090909 })
       .end((err, res) => {
         if (err) return done(err)
@@ -188,7 +188,7 @@ describe('DELETE /user/:userId', () => {
   test('TEST CASE 1: UNAUTHORIZED', (done) => {
     request(app)
       .delete(`/api/v1/user/${users[0].id}`)
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -200,7 +200,7 @@ describe('DELETE /user/:userId', () => {
   test('TEST CASE 2: INTERNAL SERVER ERROR', (done) => {
     request(app)
       .delete(`/api/v1/user/akanerror`)
-      .set({ access_token: access_token_admin })
+      .set({ authorization: `Bearer ${access_token_admin}` })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -212,7 +212,7 @@ describe('DELETE /user/:userId', () => {
   test('TEST CASE 3: SUCCESS', (done) => {
     request(app)
       .delete(`/api/v1/user/${users[1].id}`)
-      .set({ access_token: access_token_user })
+      .set({ authorization: `Bearer ${access_token_user}` })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(200)
