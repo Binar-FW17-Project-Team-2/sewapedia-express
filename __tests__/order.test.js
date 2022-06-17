@@ -32,7 +32,66 @@ const products = [
     details: 'details1',
     img_url: ['image1', 'image2'],
     price: 2000,
-    stock: 5,
+    stock: 2,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
+const orderItem = [
+  {
+    id: 201,
+    lamaSewa: 2,
+    qty: 1,
+    priceItem: products[0].price,
+    subTotalPrice: 2 * 2 * products[0].price,
+    productId: products[0].id,
+    userId: users[1].id,
+    status: 'order',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    orderId: 301,
+  },
+  {
+    id: 202,
+    lamaSewa: 2,
+    qty: 1,
+    priceItem: products[0].price,
+    subTotalPrice: 2 * 2 * products[0].price,
+    productId: products[0].id,
+    userId: users[1].id,
+    status: 'order',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    orderId: 301,
+  },
+  {
+    id: 203,
+    lamaSewa: 2,
+    qty: 3,
+    priceItem: products[0].price,
+    subTotalPrice: 2 * 2 * products[0].price,
+    productId: products[0].id,
+    userId: users[0].id,
+    status: 'order',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    orderId: 302,
+  },
+]
+const orders = [
+  {
+    id: 301,
+    status: 'unpayed',
+    totalPrice: orderItem[0].subTotalPrice,
+    userId: users[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 302,
+    status: 'unpayed',
+    totalPrice: orderItem[0].subTotalPrice,
+    userId: users[0].id,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
@@ -51,6 +110,14 @@ beforeAll((done) => {
     .then((data) => {
       products[0].createdAt = data[0].createdAt.toISOString()
       products[0].updatedAt = data[0].updatedAt.toISOString()
+      return queryInterface.bulkInsert('orders', orders, { returning: true })
+    })
+    .then(() => {
+      return queryInterface.bulkInsert('order_items', orderItem, {
+        returning: true,
+      })
+    })
+    .then((data) => {
       done()
     })
     .catch((err) => done(err))
@@ -61,8 +128,203 @@ afterAll((done) => {
     .bulkDelete('users')
     .then(() => queryInterface.bulkDelete('products'))
     .then(() => queryInterface.bulkDelete('order_items'))
+    .then(() => queryInterface.bulkDelete('orders'))
     .then(() => done())
     .catch((err) => done(err))
+})
+
+// ====> GET ORDER UNPAYED <====
+describe('GET /order/unpayed', () => {
+  test('TEST CASE 1: SUCCESS', (done) => {
+    request(app)
+      .get(`/api/v1/order/unpayed`)
+      .set({ authorization: `Bearer ${access_token_user}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(200)
+        done()
+      })
+  })
+  test('TEST CASE 2: GAK ADA', (done) => {
+    request(app)
+      .get(`/api/v1/order/unpayed`)
+      .set({ authorization: `Bearer ${createToken({ id: 111 })}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(200)
+        done()
+      })
+  })
+  test('TEST CASE 3: ERROR', (done) => {
+    request(app)
+      .get(`/api/v1/order/unpayed`)
+      .set({ authorization: `Bearer ${createToken({ id: 'error' })}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(500)
+        done()
+      })
+  })
+})
+
+// ====> CONFIRM ORDER <====
+describe('POST /order/:id', () => {
+  test('TEST CASE 1: KONFIRMASI ORDER SUCCESS', (done) => {
+    request(app)
+      .post(`/api/v1/order/${orders[0].id}`)
+      .set({ authorization: `Bearer ${access_token_admin}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(200)
+        done()
+      })
+  })
+  test('TEST CASE 2: RECEIPT GAK ADA', (done) => {
+    request(app)
+      .post(`/api/v1/order/${orders[0].id}`)
+      .set({ authorization: `Bearer ${access_token_admin}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(404)
+        done()
+      })
+  })
+  test('TEST CASE 3: STOCK KURANG', (done) => {
+    request(app)
+      .post(`/api/v1/order/${orders[1].id}`)
+      .set({ authorization: `Bearer ${access_token_admin}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(400)
+        done()
+      })
+  })
+  test('TEST CASE 4: INTERNAL SERVER ERROR', (done) => {
+    request(app)
+      .post(`/api/v1/order/error`)
+      .set({ authorization: `Bearer ${access_token_admin}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(500)
+        done()
+      })
+  })
+})
+
+// ====> GET RENTED PRODUCT <====
+describe('GET /ORDER/RENTED', () => {
+  test('TEST CASE 1: SUCCESS', (done) => {
+    request(app)
+      .get('/api/v1/order/rented')
+      .set({ authorization: `Bearer ${access_token_user}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(200)
+        done()
+      })
+  })
+  test('TEST CASE 2: ERROR', (done) => {
+    request(app)
+      .get('/api/v1/order/rented')
+      .set({ authorization: `Bearer ${createToken({ id: 'error' })}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(500)
+        done()
+      })
+  })
+})
+
+// ====> GET RENTED PRODUCT BY ID <====
+describe('GET /ORDER/RENTED/:ID', () => {
+  test('TEST CASE 1: SUCCESS', (done) => {
+    request(app)
+      .get(`/api/v1/order/rented/${orderItem[0].id}`)
+      .set({ authorization: `Bearer ${access_token_user}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(200)
+        done()
+      })
+  })
+  test('TEST CASE 2: NOT FOUND', (done) => {
+    request(app)
+      .get(`/api/v1/order/rented/110`)
+      .set({ authorization: `Bearer ${access_token_user}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(404)
+        done()
+      })
+  })
+  test('TEST CASE 3: INTERNAL', (done) => {
+    request(app)
+      .get(`/api/v1/order/rented/erro`)
+      .set({ authorization: `Bearer ${access_token_user}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(500)
+        done()
+      })
+  })
+})
+
+// ====> CONFIRM RETURN <===
+describe('POST /order/rented/:id', () => {
+  test('TEST CASE 1: SUCCESS', (done) => {
+    request(app)
+      .post(`/api/v1/order/rented/${orderItem[0].id}`)
+      .set({ authorization: `Bearer ${access_token_admin}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(200)
+        done()
+      })
+  })
+  test('TEST CASE 2: NOT FOUND', (done) => {
+    request(app)
+      .post(`/api/v1/order/rented/111`)
+      .set({ authorization: `Bearer ${access_token_admin}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(404)
+        done()
+      })
+  })
+  test('TEST CASE 3: ERROR', (done) => {
+    request(app)
+      .post(`/api/v1/order/rented/erro`)
+      .set({ authorization: `Bearer ${access_token_admin}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(500)
+        done()
+      })
+  })
+})
+
+// ====> GET RETURNED <====
+describe('GET /order/return', () => {
+  test('TEST CASE 1: SUCCESS', (done) => {
+    request(app)
+      .get('/api/v1/order/return')
+      .set({ authorization: `Bearer ${access_token_user}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(200)
+        done()
+      })
+  })
+  test('TEST CASE 2: ERROR', (done) => {
+    request(app)
+      .get('/api/v1/order/return')
+      .set({ authorization: `Bearer ${createToken({ id: 'error' })}` })
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.status).toBe(500)
+        done()
+      })
+  })
 })
 
 describe('POST /order/item', () => {
@@ -82,11 +344,6 @@ describe('POST /order/item', () => {
         if (err) return done(err)
         const { body, status } = res
         expect(status).toBe(201)
-        expect(body).toHaveProperty('qty', 2)
-        expect(body).toHaveProperty('lamaSewa', 2)
-        expect(body).toHaveProperty('status', 'order')
-        expect(body).toHaveProperty('subTotalPrice', 2 * 2 * products[0].price)
-        expect(body).toHaveProperty('productDetails', products[0])
         done()
       })
   })

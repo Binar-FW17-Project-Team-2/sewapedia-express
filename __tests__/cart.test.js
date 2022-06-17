@@ -297,7 +297,7 @@ describe('DELETE /cart', () => {
     request(app)
       .delete('/api/v1/cart')
       .set({ authorization: `Bearer ${access_token_user}` })
-      .send({ id: products[0].id })
+      .send({ productId: products[0].id })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(200)
@@ -308,7 +308,7 @@ describe('DELETE /cart', () => {
     request(app)
       .delete('/api/v1/cart')
       .set({ authorization: `Bearer ${access_token_user}` })
-      .send({ id: 'error' })
+      .send({ productId: 'error' })
       .end((err, res) => {
         if (err) return done(err)
         expect(res.status).toBe(500)
