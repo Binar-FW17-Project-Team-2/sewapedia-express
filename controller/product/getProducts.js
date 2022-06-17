@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
       where: { ...query },
       limit: limit ?? null,
       offset: offset ?? null,
-      order: [[orderBy ?? 'createdAt', order ?? 'ASC']],
+      order: [[orderBy ?? 'createdAt', order ?? 'DESC']],
     })
     res.status(200).json(products)
   } catch (error) {

@@ -7,6 +7,7 @@ const { hash } = require('../utils/passwordHandler')
 const tableProduct = require('../migrations/20220408163150-create-product')
 const tableWishlist = require('../migrations/20220408163223-create-wishlist')
 const tableOrderItem = require('../migrations/20220514112855-create-order-item')
+const tableReview = require('../migrations/20220617034516-create-review')
 
 let access_token_admin
 let access_token_user
@@ -255,8 +256,10 @@ describe('GET /product/category', () => {
   beforeEach((done) => {
     tableOrderItem.down(queryInterface).catch(() => {
       tableWishlist.down(queryInterface).then(() => {
-        tableProduct.down(queryInterface)
-        done()
+        tableReview.down(queryInterface).then(() => {
+          tableProduct.down(queryInterface)
+          done()
+        })
       })
     })
   })
@@ -265,6 +268,7 @@ describe('GET /product/category', () => {
       .up(queryInterface, Sequelize)
       .then(() => tableWishlist.up(queryInterface, Sequelize))
       .then(() => tableOrderItem.up(queryInterface, Sequelize))
+      .then(() => tableReview.up(queryInterface, Sequelize))
       .catch((err) => console.log(err))
   })
   test('TEST CASE 2: INTERNAL SERVER ERROR', (done) => {
