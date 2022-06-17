@@ -8,6 +8,10 @@ module.exports = async (req, res, next) => {
         {
           model: db.OrderItem,
           as: 'listOrderItem',
+          include: {
+            model: db.Product,
+            as: 'productDetails',
+          },
         },
         {
           model: db.User,

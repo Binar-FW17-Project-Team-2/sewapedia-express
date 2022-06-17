@@ -50,7 +50,7 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM,
-        values: ['cart', 'order', 'rented'],
+        values: ['cart', 'order', 'rented', 'returned', 'reviewed'],
       },
       createdAt: {
         allowNull: false,
