@@ -15,7 +15,6 @@ module.exports = async (req, res, next) => {
         userId: id,
         status: 'cart',
       },
-      order: [['createdAt', 'ASC']],
     })
     res.status(200).json(cart)
   } catch (error) {
