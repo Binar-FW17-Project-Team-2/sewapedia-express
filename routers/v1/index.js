@@ -6,6 +6,7 @@ const category = require('./categoryRoutes')
 const user = require('./userRouter')
 const cart = require('./cartRouter')
 const order = require('./orderRouter')
+const review = require('./reviewRouter')
 
 v1.use('/', auth)
 v1.use('/product', product)
@@ -14,5 +15,6 @@ v1.use('/category', category)
 v1.use('/user', user)
 v1.use('/cart', cart)
 v1.use('/order', order)
+v1.use('/review', review)
 
 module.exports = v1
